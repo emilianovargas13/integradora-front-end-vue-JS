@@ -5,6 +5,14 @@ import RecoverPasswordP1View from "../views/auth/Recover_password1_view.vue";
 import RecoverPasswordP2View from "../views/auth/Recover_password2_view.vue";
 import RecoverPasswordP3View from "../views/auth/Recover_password3_view.vue";
 import ProfileView from "../views/admin/Profile_view.vue";
+import Events from "../views/admin/Events.vue";
+import Resources from "../views/admin/Resources.vue";
+import Stats from "../views/admin/Stats.vue";
+import Suppliers from "../views/admin/Suppliers.vue";
+import ViewAdmins from "../views/admin/View_Admins.vue";
+
+
+
 
 Vue.use(Router);
 
@@ -35,6 +43,31 @@ export default new Router({
       path: "/profile-view",
       name: "ProfileView",
       component: ProfileView,
+    },
+    {
+      path: "/events",
+      name: "Events",
+      component: Events,
+    },
+    {
+      path: "/resources",
+      name: "Rersources",
+      component: Resources,
+    },
+    {
+      path: "/stats",
+      name: "Stats",
+      component: Stats,
+    },
+    {
+      path: "/suppliers",
+      name: "Suppliers",
+      component: Suppliers,
+    },
+    {
+      path: "/view-admins",
+      name: "ViewAdmins",
+      component: ViewAdmins,
     },
 
 
