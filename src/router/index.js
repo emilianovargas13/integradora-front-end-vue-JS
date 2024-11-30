@@ -32,7 +32,7 @@ export default new Router({
       component: RecoverPasswordP3View,
     },
     {
-      path: "/profile_view",
+      path: "/profile-view",
       name: "ProfileView",
       component: ProfileView,
     },

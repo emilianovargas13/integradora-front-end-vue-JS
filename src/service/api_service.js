@@ -2,6 +2,29 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:8080"; // Cambia esto si el backend está en otro lugar
 
+// Crear una instancia de Axios
+const apiClient = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+// Agregar un interceptor para las solicitudes
+apiClient.interceptors.request.use(
+  (config) => {
+    // Obtener el token del localStorage
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      // Si hay un token, agregarlo al header de autorización
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config; // Retornar la configuración de la solicitud modificada
+  },
+  (error) => {
+    // Manejo de error al configurar la solicitud
+    return Promise.reject(error);
+  }
+);
+
+// Ahora utilizamos apiClient en lugar de axios directamente
 const apiService = {
   /**
    * Inicia sesión con las credenciales proporcionadas.
@@ -9,7 +32,7 @@ const apiService = {
    * @returns {Promise<Object>} - Respuesta de la API.
    */
   login(credentials) {
-    return axios.post(`${API_BASE_URL}/api/auth/`, credentials)
+    return apiClient.post(`/api/auth/`, credentials)
       .then((response) => {
         // Devuelve el token y los datos del usuario si el inicio de sesión es exitoso
         return response.data.data;
@@ -26,10 +49,10 @@ const apiService = {
       });
   },
 
-
+  // Otras funciones de apiService que usan apiClient
   async generateResetToken(email) {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/api/users/generate-password-reset-token`, {
+      const response = await apiClient.patch(`/api/users/generate-password-reset-token`, {
         email,
       });
       return { success: true, message: response.data.message };
@@ -40,21 +63,19 @@ const apiService = {
 
   async validateRecoveryCode(email, token) {
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/validate-token`, {
+      const response = await apiClient.post(`/api/users/validate-token`, {
         email,
         token,
       });
-      // Devuelve solo el campo `data` que contiene el valor `true` o `false`
       return { success: true, data: response.data.data };
     } catch (error) {
-      // Manejo de errores
       return { success: false, message: error.response?.data?.message || "Error desconocido" };
     }
   },
 
   async recoverPassword(email, token, newPassword) {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/api/users/recover-password`, {
+      const response = await apiClient.patch(`/api/users/recover-password`, {
         email,
         token,
         newPassword,

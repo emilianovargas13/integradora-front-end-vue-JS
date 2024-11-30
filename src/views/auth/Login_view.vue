@@ -58,28 +58,30 @@ export default {
       errorMessage: "",
     };
   },
-  methods: {
+  methods: { 
     async handleLogin() {
-      this.errorMessage = "";
-      this.isLoading = true;
-      try {
-        const credentials = {
-          email: this.email,
-          password: this.password,
-        };
-        const data = await apiService.login(credentials);
+  this.errorMessage = "";
+  this.isLoading = true;
+  try {
+    const credentials = {
+      email: this.email,
+      password: this.password,
+    };
+    const data = await apiService.login(credentials);
 
-        // Guardar el token y los datos del usuario
-        localStorage.setItem("authToken", data.token);
+    // Guardar el token y los datos del usuario
+    localStorage.setItem("authToken", data.token);
 
-        // Redirigir al dashboard
-        this.$router.push("/dashboard");
-      } catch (error) {
-        this.errorMessage = error.message || "Error inesperado al iniciar sesión.";
-      } finally {
-        this.isLoading = false;
-      }
-    },
+    // Redirigir a la pantalla de perfil solo si no estás ya en ella
+    if (this.$route.path !== "/ProfileView") {
+      this.$router.push("/profile-view");
+    }
+  } catch (error) {
+    this.errorMessage = error.message || "Error inesperado al iniciar sesión.";
+  } finally {
+    this.isLoading = false;
+  }
+},
     goToRecoverPassword() {
       if (this.$route.path !== "/recover-password-step1") {
         this.$router.push("/recover-password-step1");
