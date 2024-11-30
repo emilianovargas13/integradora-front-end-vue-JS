@@ -13,33 +13,33 @@
         <font-awesome-icon :icon="isSidebarHidden ? 'chevron-left' : 'chevron-right'" />
       </button>
       <ul class="sidebar-list">
-        <li @click="navigate('ProfileView')" :class="{ active: currentRoute === 'ProfileView' }">
+        <li @click="navigate('ProfileView')" :class="{ active: currentRoute === 'ProfileView' }" :title="isSidebarHidden ? 'Inicio' : ''">
           <font-awesome-icon icon="house-user" class="menu-icon" />
           <span v-if="!isSidebarHidden">Inicio</span>
         </li>
-        <li @click="navigate('Stats')" :class="{ active: currentRoute === 'Stats' }">
+        <li @click="navigate('Stats')" :class="{ active: currentRoute === 'Stats' }" :title="isSidebarHidden ? 'Estadísticas' : ''">
           <font-awesome-icon icon="chart-line" class="menu-icon" />
           <span v-if="!isSidebarHidden">Estadísticas</span>
         </li>
-        <li @click="navigate('ViewAdmins')" :class="{ active: currentRoute === 'ViewAdmins' }">
+        <li @click="navigate('ViewAdmins')" :class="{ active: currentRoute === 'ViewAdmins' }" :title="isSidebarHidden ? 'Administradores' : ''">
           <font-awesome-icon icon="user" class="menu-icon" />
           <span v-if="!isSidebarHidden">Administradores</span>
         </li>
-        <li @click="navigate('Resources')" :class="{ active: currentRoute === 'Resources' }">
+        <li @click="navigate('Resources')" :class="{ active: currentRoute === 'Resources' }" :title="isSidebarHidden ? 'Recursos' : ''">
           <font-awesome-icon icon="folder-open" class="menu-icon" />
           <span v-if="!isSidebarHidden">Recursos</span>
         </li>
-        <li @click="navigate('Events')" :class="{ active: currentRoute === 'Events' }">
+        <li @click="navigate('Events')" :class="{ active: currentRoute === 'Events' }" :title="isSidebarHidden ? 'Eventos' : ''">
           <font-awesome-icon icon="calendar" class="menu-icon" />
           <span v-if="!isSidebarHidden">Eventos</span>
         </li>
-        <li @click="navigate('Suppliers')" :class="{ active: currentRoute === 'Suppliers' }">
+        <li @click="navigate('Suppliers')" :class="{ active: currentRoute === 'Suppliers' }" :title="isSidebarHidden ? 'Proveedores' : ''">
           <font-awesome-icon icon="truck" class="menu-icon" />
           <span v-if="!isSidebarHidden">Proveedores</span>
         </li>
       </ul>
       <!-- Logout Button -->
-      <div class="logout-button" @click="logout">
+      <div class="logout-button" @click="logout" :title="isSidebarHidden ? 'Cerrar Sesión' : ''">
         <font-awesome-icon icon="arrow-right-from-bracket" class="logout-icon" />
         <span v-if="!isSidebarHidden" class="logout-text">Cerrar Sesión</span>
       </div>
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       currentRoute: this.$route.name,
-      isSidebarHidden: false,
+      isSidebarHidden: localStorage.getItem('isSidebarHidden') === 'true', // Recuperar el estado desde el localStorage
     };
   },
   methods: {
@@ -77,6 +77,7 @@ export default {
     },
     toggleSidebar() {
       this.isSidebarHidden = !this.isSidebarHidden;
+      localStorage.setItem('isSidebarHidden', this.isSidebarHidden); // Guardar el estado en localStorage
     },
     navigateToProfile() {
       this.$router.push({ name: "ProfileView" });
@@ -90,6 +91,21 @@ export default {
 </script>
 
 <style scoped>
+.layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Tooltip Customization */
+.tooltip-custom {
+  background-color: #00509e !important; /* Azul fuerte */
+  color: #ffffff !important;
+  padding: 8px 12px !important;
+  border-radius: 5px !important;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3) !important;
+  font-size: 14px !important;
+}
 .layout {
   display: flex;
   height: 100vh;

@@ -51,7 +51,7 @@ export default new Router({
     },
     {
       path: "/resources",
-      name: "Rersources",
+      name: "Resources",
       component: Resources,
     },
     {

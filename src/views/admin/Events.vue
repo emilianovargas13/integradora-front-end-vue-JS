@@ -1,28 +1,26 @@
 <template>
+  <Layout>
     <div class="events-container">
       <h1>Página de Eventos</h1>
       <p>Bienvenido a la sección de Eventos. Aquí puedes gestionar todos los eventos relacionados con tu organización.</p>
     </div>
-  </template>
-  
-  <script>
-  
-  export default {
+  </Layout>
+</template>
 
+<script>
+import Layout from "@/components/Layout.vue";
 
-    name: "EventManagement",
-   
+export default {
+  name: "EventManagement",
+  components: {
+    Layout,
+  },
+};
+</script>
 
-
-
-  };
-  
-  </script>
-  
-  <style scoped>
-  .events-container {
-    padding: 2rem;
-    text-align: center;
-  }
-  </style>
-  
+<style scoped>
+.events-container {
+  padding: 2rem;
+  text-align: center;
+}
+</style>
