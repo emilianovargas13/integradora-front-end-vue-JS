@@ -152,6 +152,55 @@ const apiService = {
         throw error;
       });
   },
+
+
+  // Método para obtener usuarios con paginación
+  getPagedUsers(paginationParams) {
+    return apiClient.post(`/api/users/paged`, paginationParams)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo usuarios paginados:", error);
+        throw error;
+      });
+  },
+
+  // Cambiar el estado del usuario
+  changeUserStatus(userId) {
+    return apiClient.patch(`/api/users/change/status`, { id: userId })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error cambiando estado del usuario:", error);
+        throw error;
+      });
+  },
+
+  // Solicitar un restablecimiento de contraseña para el usuario
+  resetUserPassword(userId) {
+    return apiClient.post(`/api/users/reset-password`, { id: userId })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error reseteando contraseña del usuario:", error);
+        throw error;
+      });
+  },
+
+
+    /**
+   * Método para crear un nuevo administrador.
+   * @param {Object} adminData - Datos del nuevo administrador.
+   */
+    createAdmin(adminData) {
+      return apiClient.post(`/api/users/create-admin`, adminData)
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error creando administrador:", error);
+          throw error;
+        });
+    },
+
+
+
+
 };
 
 export default apiService;
