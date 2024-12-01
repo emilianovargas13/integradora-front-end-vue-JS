@@ -67,24 +67,38 @@ export default {
   data() {
     return {
       currentRoute: this.$route.name,
-      isSidebarHidden: localStorage.getItem('isSidebarHidden') === 'true', // Recuperar el estado desde el localStorage
+      isSidebarHidden: localStorage.getItem('isSidebarHidden') === 'true',
     };
   },
   methods: {
     navigate(routeName) {
-      this.currentRoute = routeName;
-      this.$router.push({ name: routeName });
+      if (this.$route.name !== routeName) {
+        this.$router.push({ name: routeName }).catch((error) => {
+          if (error.name !== 'NavigationDuplicated') {
+            // Si ocurre otro error que no sea navegación duplicada, lo lanzamos
+            console.error(error);
+          }
+        });
+      }
     },
     toggleSidebar() {
       this.isSidebarHidden = !this.isSidebarHidden;
-      localStorage.setItem('isSidebarHidden', this.isSidebarHidden); // Guardar el estado en localStorage
+      localStorage.setItem('isSidebarHidden', this.isSidebarHidden);
     },
     navigateToProfile() {
-      this.$router.push({ name: "ProfileView" });
+      this.$router.push({ name: "ProfileView" }).catch((error) => {
+        if (error.name !== 'NavigationDuplicated') {
+          console.error(error);
+        }
+      });
     },
     logout() {
       localStorage.removeItem("authToken");
-      this.$router.push({ name: "Login" });
+      this.$router.push({ name: "Login" }).catch((error) => {
+        if (error.name !== 'NavigationDuplicated') {
+          console.error(error);
+        }
+      });
     },
   },
 };

@@ -49,7 +49,7 @@ const apiService = {
       });
   },
 
-  // Otras funciones de apiService que usan apiClient
+  // Generar un token para restablecer la contraseña
   async generateResetToken(email) {
     try {
       const response = await apiClient.patch(`/api/users/generate-password-reset-token`, {
@@ -61,6 +61,7 @@ const apiService = {
     }
   },
 
+  // Validar el token
   async validateRecoveryCode(email, token) {
     try {
       const response = await apiClient.post(`/api/users/validate-token`, {
@@ -73,6 +74,7 @@ const apiService = {
     }
   },
 
+  // Recuperar la contraseña
   async recoverPassword(email, token, newPassword) {
     try {
       const response = await apiClient.patch(`/api/users/recover-password`, {
@@ -84,6 +86,71 @@ const apiService = {
     } catch (error) {
       return { success: false, message: error.response?.data?.message || "Error desconocido" };
     }
+  },
+
+  // Métodos para los Tipos de Recursos
+  /**
+   * Obtiene todos los tipos de recursos activos.
+   */
+  getAllResourceTypes() {
+    return apiClient.get(`/api/resourceTypes/list`)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo los tipos de recursos:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Crea un nuevo tipo de recurso.
+   * @param {Object} resourceType - Datos del nuevo tipo de recurso.
+   */
+  saveResourceType(resourceType) {
+    return apiClient.post(`/api/resourceTypes/`, resourceType)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error creando tipo de recurso:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Actualiza un tipo de recurso existente.
+   * @param {Object} resourceType - Datos para actualizar el tipo de recurso.
+   */
+  updateResourceType(resourceType) {
+    return apiClient.put(`/api/resourceTypes/`, resourceType)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error actualizando tipo de recurso:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Cambia el estado de un tipo de recurso.
+   * @param {Object} resourceTypeStatusDto - DTO con el ID para cambiar el estado.
+   */
+  changeStatusResourceType(resourceTypeStatusDto) {
+    return apiClient.patch(`/api/resourceTypes/change/status`, resourceTypeStatusDto)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error cambiando estado del tipo de recurso:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Obtiene una lista paginada de tipos de recursos.
+   * @param {Object} paginationParams - Parámetros de paginación y filtro.
+   */
+  getPagedResourceTypes(paginationParams) {
+    return apiClient.post(`/api/resourceTypes/paged`, paginationParams)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo tipos de recursos paginados:", error);
+        throw error;
+      });
   },
 };
 
