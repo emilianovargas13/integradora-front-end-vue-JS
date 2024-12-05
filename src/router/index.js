@@ -6,6 +6,7 @@ import RecoverPasswordP2View from "../views/auth/Recover_password2_view.vue";
 import RecoverPasswordP3View from "../views/auth/Recover_password3_view.vue";
 import ProfileView from "../views/admin/Profile_view.vue";
 import Events from "../views/admin/Events.vue";
+import ResourcesType from "../views/admin/Resources_type.vue";
 import Resources from "../views/admin/Resources.vue";
 import Stats from "../views/admin/Stats.vue";
 import Suppliers from "../views/admin/Suppliers.vue";
@@ -50,9 +51,9 @@ export default new Router({
       component: Events,
     },
     {
-      path: "/resources",
-      name: "Resources",
-      component: Resources,
+      path: "/resources_type",
+      name: "ResourcesType",
+      component: ResourcesType,
     },
     {
       path: "/stats",
@@ -69,7 +70,11 @@ export default new Router({
       name: "ViewAdmins",
       component: ViewAdmins,
     },
-
+    {
+      path: "/resources",
+      name: "Resources",
+      component: Resources,
+    },
 
 
 

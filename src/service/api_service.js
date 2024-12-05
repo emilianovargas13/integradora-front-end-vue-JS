@@ -198,9 +198,173 @@ const apiService = {
         });
     },
 
+    // Métodos para la gestión de Recursos
+
+  /**
+   * Obtiene una lista paginada de recursos.
+   * @param {Object} paginationParams - Parámetros de paginación y filtro.
+   * @param {number} page - Número de página.
+   * @param {number} size - Tamaño de la página.
+   * @param {string} sort - Campo de ordenación.
+   * @param {string} direction - Dirección de la ordenación ('asc' o 'desc').
+   */
+  getPagedResources(paginationParams, page = 0, size = 10, sort = 'id', direction = 'desc') {
+    return apiClient.post(`/api/resources/paged?page=${page}&size=${size}&sort=${sort}&direction=${direction}`, paginationParams)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo recursos paginados:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Obtiene todos los recursos activos.
+   */
+  getAllActiveResources() {
+    return apiClient.get('/api/resources/list')
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo la lista de recursos activos:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Guarda un nuevo recurso.
+   * @param {Object} resourceData - Datos del nuevo recurso.
+   */
+  saveResource(resourceData) {
+    return apiClient.post('/api/resources/', resourceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error guardando recurso:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Actualiza un recurso existente.
+   * @param {Object} resourceData - Datos para actualizar el recurso.
+   */
+  updateResource(resourceData) {
+    return apiClient.put('/api/resources/', resourceData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error actualizando recurso:", error);
+        throw error;
+      });
+  },
+
+  /**
+   * Cambia el estado de un recurso (activo/inactivo).
+   * @param {number} resourceId - ID del recurso para cambiar el estado.
+   */
+  changeResourceStatus(resourceId) {
+    return apiClient.patch('/api/resources/change/status', { id: resourceId })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error cambiando estado del recurso:", error);
+        throw error;
+      });
+  },
 
 
 
-};
+    /**
+   * Guarda un nuevo proveedor.
+   * @param {Object} supplierData - Datos del nuevo proveedor.
+   */
+    saveSupplier(supplierData) {
+      return apiClient.post('/api/suppliers/', supplierData)
+        .then((response) => {
+          console.log("Respuesta exitosa del servidor:", response.data);
+          return response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            // Servidor respondió con un código de estado fuera de 2xx
+            console.error("Error guardando proveedor:", error.response.data);
+          } else if (error.request) {
+            // La solicitud fue hecha pero no se recibió ninguna respuesta
+            console.error("No se recibió respuesta del servidor:", error.request);
+          } else {
+            // Algo pasó al configurar la solicitud
+            console.error("Error al configurar la solicitud:", error.message);
+          }
+          throw error;
+        });
+    },
+  
+    /**
+     * Obtiene todos los proveedores activos.
+     */
+    getAllActiveSuppliers() {
+      return apiClient.get('/api/suppliers/list')
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error obteniendo proveedores activos:", error);
+          throw error;
+        });
+    },
+  
+    /**
+     * Obtiene una lista paginada de proveedores.
+     * @param {Object} paginationParams - Parámetros de paginación y filtro.
+     * @param {number} page - Número de página.
+     * @param {number} size - Tamaño de la página.
+     * @param {string} sort - Campo de ordenación.
+     * @param {string} direction - Dirección de la ordenación ('asc' o 'desc').
+     */
+    getPagedSuppliers(paginationParams, page = 0, size = 10, sort = 'id', direction = 'desc') {
+      return apiClient.post(`/api/suppliers/paged?page=${page}&size=${size}&sort=${sort}&direction=${direction}`, paginationParams)
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error obteniendo proveedores paginados:", error);
+          throw error;
+        });
+    },
+  
+    /**
+     * Cambia el estado de un proveedor (activo/inactivo).
+     * @param {number} supplierId - ID del proveedor para cambiar el estado.
+     */
+    changeSupplierStatus(supplierId) {
+      return apiClient.patch('/api/suppliers/change/status', { id: supplierId })
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error cambiando estado del proveedor:", error);
+          throw error;
+        });
+    },
+  
+    /**
+     * Actualiza un proveedor existente.
+     * @param {Object} supplierData - Datos para actualizar el proveedor.
+     */
+    updateSupplier(supplierData) {
+      return apiClient.put('/api/suppliers/', supplierData)
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error actualizando proveedor:", error);
+          throw error;
+        });
+    },
+  
+    /**
+     * Obtiene los detalles de un proveedor.
+     * @param {number} supplierId - ID del proveedor para obtener los detalles.
+     */
+    getSupplierDetails(supplierId) {
+      return apiClient.post('/api/suppliers/details', { id: supplierId })
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error("Error obteniendo detalles del proveedor:", error);
+          throw error;
+        });
+    },
+  };
+
+
+
 
 export default apiService;

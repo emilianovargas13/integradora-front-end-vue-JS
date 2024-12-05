@@ -1,43 +1,64 @@
 <template>
   <Layout>
     <div class="admins-container">
-      <h1 class="text-center mb-4">Administradores</h1>
-      <p class="text-center">Aquí puedes ver, crear, cambiar el estado y restablecer la contraseña de los administradores.</p>
-
-      <div class="d-flex justify-content-between mb-3">
-        <h2>Lista de Administradores</h2>
-        <b-button @click="showCreateAdminDialog" variant="primary">Crear Nuevo Administrador</b-button>
+      <div class="header-container">
+        <div class="header-left">
+          <h1 class="text-center mb-4">Administradores</h1>
+          <p class="text-center">Aquí puedes ver, crear, cambiar el estado y restablecer la contraseña de los administradores.</p>
+        </div>
       </div>
 
-      <b-table :items="admins" :fields="fields" responsive="sm" hover>
-        <!-- Estado Activo/Inactivo -->
-        <template #cell(active)="data">
-          <b-badge :variant="data.item.status ? 'success' : 'danger'" class="text-dark">
-            {{ data.item.status ? 'Activo' : 'Inactivo' }}
-          </b-badge>
-        </template>
+      <!-- Botón para crear un nuevo administrador -->
+      <div class="create-button-container">
+        <b-button @click="showCreateAdminDialog" variant="primary" size="lg" class="create-button">
+          <font-awesome-icon icon="plus-circle" class="mr-2" />
+          Crear Nuevo Administrador
+        </b-button>
+      </div>
 
-        <!-- Acciones -->
-        <template #cell(actions)="data">
-          <b-button size="sm" @click="changeStatus(data.item.id)" :variant="data.item.status ? 'danger' : 'success'" class="button-spacing">
-            <font-awesome-icon :icon="['fas', data.item.status ? 'times' : 'check']" />
-            {{ data.item.status ? 'Desactivar' : 'Activar' }}
-          </b-button>
-          <b-button size="sm" @click="resetPassword(data.item.id)" variant="warning" class="button-spacing">
-            <font-awesome-icon :icon="['fas', 'redo']" /> Resetear Contraseña
-          </b-button>
-        </template>
-      </b-table>
+      <!-- Tabla de administradores con paginación -->
+      <div class="card-container expanded-table">
+        <b-card class="shadow-sm">
+          <b-table
+            :items="admins"
+            :fields="fields"
+            responsive="sm"
+            hover
+            class="admin-table"
+            :per-page="pageSize"
+            :current-page="currentPage"
+          >
+            <!-- Estado Activo/Inactivo -->
+            <template #cell(active)="data">
+              <b-badge :variant="data.item.status ? 'success' : 'danger'" class="text-dark">
+                {{ data.item.status ? 'Activo' : 'Inactivo' }}
+              </b-badge>
+            </template>
 
-      <!-- Paginación -->
-      <b-pagination
-        v-if="totalPages > 1"
-        v-model="currentPage"
-        :total-rows="totalItems"
-        :per-page="pageSize"
-        @change="fetchAdmins"
-        align="center"
-      ></b-pagination>
+            <!-- Acciones -->
+            <template #cell(actions)="data">
+              <b-button size="sm" @click="changeStatus(data.item.id)" :variant="data.item.status ? 'danger' : 'success'" class="button-spacing">
+                <font-awesome-icon :icon="['fas', data.item.status ? 'times' : 'check']" />
+                {{ data.item.status ? 'Desactivar' : 'Activar' }}
+              </b-button>
+              <b-button size="sm" @click="resetPassword(data.item.id)" variant="warning" class="button-spacing">
+                <font-awesome-icon :icon="['fas', 'redo']" /> Resetear Contraseña
+              </b-button>
+            </template>
+          </b-table>
+
+          <!-- Paginación -->
+          <b-pagination
+            v-if="totalPages > 1"
+            v-model="currentPage"
+            :total-rows="totalItems"
+            :per-page="pageSize"
+            @change="fetchAdmins"
+            align="center"
+            class="mt-3"
+          ></b-pagination>
+        </b-card>
+      </div>
 
       <!-- Modal para crear administrador -->
       <b-modal v-model="showModal" title="Crear Administrador">
@@ -73,7 +94,8 @@
 <script>
 import Layout from "@/components/Layout.vue";
 import apiService from "@/service/api_service";
-import { BTable, BButton, BBadge, BPagination, BModal, BForm, BFormGroup, BFormInput } from "bootstrap-vue";
+import { BTable, BButton, BBadge, BPagination, BModal, BForm, BFormGroup, BFormInput, BCard } from "bootstrap-vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "AdminManagement",
@@ -87,6 +109,8 @@ export default {
     BForm,
     BFormGroup,
     BFormInput,
+    BCard,
+    FontAwesomeIcon,
   },
   data() {
     return {
@@ -189,6 +213,35 @@ export default {
 .admins-container {
   padding: 2rem;
   text-align: center;
+  background-color: #f5f5f5; /* Fondo claro para una mejor presentación */
+}
+
+.header-container {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #003366;
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.card-container {
+  margin: 0 auto;
+  max-width: 1200px; /* Expandir para más espacio */
+}
+
+.admin-table {
+  border-radius: 8px;
+}
+
+.modal-footer .b-button {
+  margin-right: 10px;
 }
 
 .button-spacing {

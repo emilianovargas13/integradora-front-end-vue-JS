@@ -25,7 +25,7 @@
           <font-awesome-icon icon="user" class="menu-icon" />
           <span v-if="!isSidebarHidden">Administradores</span>
         </li>
-        <li @click="navigate('Resources')" :class="{ active: currentRoute === 'Resources' }" :title="isSidebarHidden ? 'Recursos' : ''">
+        <li @click="navigate('ResourcesType')" :class="{ active: currentRoute === 'ResourcesType' }" :title="isSidebarHidden ? 'Recursos' : ''">
           <font-awesome-icon icon="folder-open" class="menu-icon" />
           <span v-if="!isSidebarHidden">Recursos</span>
         </li>
