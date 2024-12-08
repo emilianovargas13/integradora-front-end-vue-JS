@@ -31,6 +31,22 @@ const apiService = {
    * @param {Object} credentials - Credenciales de inicio de sesión (email y password).
    * @returns {Promise<Object>} - Respuesta de la API.
    */
+  /**
+   * Método para crear un nuevo administrador.
+   * @param {Object} adminData - Datos del nuevo administrador.
+   */
+  createAdmin(adminData) {
+    return apiClient.post(`/api/users/create-admin`, adminData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error creando administrador:", error);
+        throw error;
+      });
+  },
+
+
+
+
   login(credentials) {
     return apiClient.post(`/api/auth/`, credentials)
       .then((response) => {
@@ -185,20 +201,8 @@ const apiService = {
   },
 
 
-    /**
-   * Método para crear un nuevo administrador.
-   * @param {Object} adminData - Datos del nuevo administrador.
-   */
-    createAdmin(adminData) {
-      return apiClient.post(`/api/users/create-admin`, adminData)
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error creando administrador:", error);
-          throw error;
-        });
-    },
 
-    // Métodos para la gestión de Recursos
+  // Métodos para la gestión de Recursos
 
   /**
    * Obtiene una lista paginada de recursos.
@@ -267,102 +271,180 @@ const apiService = {
         throw error;
       });
   },
+  
 
 
+  /**
+ * Guarda un nuevo proveedor.
+ * @param {Object} supplierData - Datos del nuevo proveedor.
+ */
+  saveSupplier(supplierData) {
+    return apiClient
+      .post('/api/suppliers/', supplierData)
+      .then((response) => {
+        console.log("Proveedor registrado exitosamente:", response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("Error del servidor al guardar proveedor:", error.response.data);
+        } else if (error.request) {
+          console.error("No se recibió respuesta del servidor:", error.request);
+        } else {
+          console.error("Error al configurar la solicitud:", error.message);
+        }
+        throw error;
+      });
+  },
 
-    /**
-   * Guarda un nuevo proveedor.
-   * @param {Object} supplierData - Datos del nuevo proveedor.
+  /**
+   * Obtiene todos los proveedores activos.
    */
-    saveSupplier(supplierData) {
-      return apiClient.post('/api/suppliers/', supplierData)
-        .then((response) => {
-          console.log("Respuesta exitosa del servidor:", response.data);
-          return response.data;
-        })
-        .catch((error) => {
-          if (error.response) {
-            // Servidor respondió con un código de estado fuera de 2xx
-            console.error("Error guardando proveedor:", error.response.data);
-          } else if (error.request) {
-            // La solicitud fue hecha pero no se recibió ninguna respuesta
-            console.error("No se recibió respuesta del servidor:", error.request);
-          } else {
-            // Algo pasó al configurar la solicitud
-            console.error("Error al configurar la solicitud:", error.message);
-          }
-          throw error;
-        });
-    },
+  /**
+* Obtiene todas las direcciones.
+*/
+  getAllAddresses() {
+    return apiClient
+      .get("/api/suppliers/addresses")
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo todas las direcciones:", error);
+        throw error;
+      });
+  },
+
+
+
+
+  /**
+   * Obtiene una lista paginada de proveedores.
+   * @param {Object} paginationParams - Parámetros de paginación y filtro.
+   * @param {number} page - Número de página.
+   * @param {number} size - Tamaño de la página.
+   * @param {string} sort - Campo de ordenación.
+   * @param {string} direction - Dirección de la ordenación ('asc' o 'desc').
+   */
+  getPagedSuppliers(paginationParams = {}, page = 0, size = 10, sort = "id", direction = "desc") {
+    return apiClient
+      .post(
+        `/api/suppliers/paged?page=${page}&size=${size}&sort=${sort}&direction=${direction}`,
+        paginationParams // Aquí siempre se envía un objeto válido
+      )
+      .then((response) => {
+        console.log("Respuesta del backend (paginated):", response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        console.error("Error obteniendo proveedores paginados:", error.response?.data || error.message);
+        throw error;
+      });
+  }
   
-    /**
-     * Obtiene todos los proveedores activos.
-     */
-    getAllActiveSuppliers() {
-      return apiClient.get('/api/suppliers/list')
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error obteniendo proveedores activos:", error);
-          throw error;
-        });
-    },
-  
-    /**
-     * Obtiene una lista paginada de proveedores.
-     * @param {Object} paginationParams - Parámetros de paginación y filtro.
-     * @param {number} page - Número de página.
-     * @param {number} size - Tamaño de la página.
-     * @param {string} sort - Campo de ordenación.
-     * @param {string} direction - Dirección de la ordenación ('asc' o 'desc').
-     */
-    getPagedSuppliers(paginationParams, page = 0, size = 10, sort = 'id', direction = 'desc') {
-      return apiClient.post(`/api/suppliers/paged?page=${page}&size=${size}&sort=${sort}&direction=${direction}`, paginationParams)
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error obteniendo proveedores paginados:", error);
-          throw error;
-        });
-    },
-  
-    /**
-     * Cambia el estado de un proveedor (activo/inactivo).
-     * @param {number} supplierId - ID del proveedor para cambiar el estado.
-     */
-    changeSupplierStatus(supplierId) {
-      return apiClient.patch('/api/suppliers/change/status', { id: supplierId })
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error cambiando estado del proveedor:", error);
-          throw error;
-        });
-    },
-  
-    /**
-     * Actualiza un proveedor existente.
-     * @param {Object} supplierData - Datos para actualizar el proveedor.
-     */
-    updateSupplier(supplierData) {
-      return apiClient.put('/api/suppliers/', supplierData)
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error actualizando proveedor:", error);
-          throw error;
-        });
-    },
-  
-    /**
-     * Obtiene los detalles de un proveedor.
-     * @param {number} supplierId - ID del proveedor para obtener los detalles.
-     */
-    getSupplierDetails(supplierId) {
-      return apiClient.post('/api/suppliers/details', { id: supplierId })
-        .then((response) => response.data)
-        .catch((error) => {
-          console.error("Error obteniendo detalles del proveedor:", error);
-          throw error;
-        });
-    },
-  };
+  ,
+
+  /**
+   * Cambia el estado de un proveedor (activo/inactivo).
+   * @param {number} supplierId - ID del proveedor para cambiar el estado.
+   */
+  changeSupplierStatus(supplierId) {
+    return apiClient.patch('/api/suppliers/change/status', { id: supplierId })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error cambiando estado del proveedor:", error);
+        throw error;
+      });
+  },
+
+  /**
+ * Actualiza un proveedor existente.
+ * @param {Object} supplierData - Datos para actualizar el proveedor.
+ */
+updateSupplier(supplierData) {
+  return apiClient.put('/api/suppliers/', supplierData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error actualizando proveedor:", error.response?.data || error.message);
+      throw error;
+    });
+}
+,
+
+  /**
+   * Obtiene los detalles de un proveedor.
+   * @param {number} supplierId - ID del proveedor para obtener los detalles.
+   */
+  getSupplierDetails(supplierId) {
+    return apiClient.post('/api/suppliers/details', { id: supplierId })
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error obteniendo detalles del proveedor:", error);
+        throw error;
+      });
+  },
+
+  getAddressById(id) {
+    return apiClient.get(`/api/addresses/${id}`)
+      .then(response => response.data)
+      .catch(error => {
+        console.error(`Error al obtener dirección con id ${id}:`, error);
+        throw error;
+      });
+  },
+
+  createAddress(addressData) {
+    return apiClient.post(`/api/addresses/`, addressData)
+      .then(response => response.data)
+      .catch(error => {
+        console.error("Error al crear dirección:", error);
+        throw error;
+      });
+  },
+
+  updateAddress(id, addressData) {
+    return apiClient.put(`/api/addresses/${id}`, addressData)
+      .then(response => response.data)
+      .catch(error => {
+        console.error(`Error al actualizar dirección con id ${id}:`, error);
+        throw error;
+      });
+  },
+
+  deleteAddress(id) {
+    return apiClient.delete(`/api/addresses/${id}`)
+      .then(response => response.data)
+      .catch(error => {
+        console.error(`Error al eliminar dirección con id ${id}:`, error);
+        throw error;
+      });
+  },
+
+  async getPagedAddresses(searchValue, page = 0, size = 10, sort = "id", direction = "asc") {
+    try {
+      const response = await apiClient.post(
+        `/api/addresses/paged`, // Asegúrate de que este sea el endpoint correcto
+        { value: searchValue || "" }, // Cuerpo de la solicitud (DTO)
+        {
+          params: {
+            page, // Página actual
+            size, // Tamaño de la página
+            sort, // Campo para ordenar
+            direction, // Dirección del orden
+          },
+        }
+      );
+      return response.data; // Retorna los datos de la respuesta
+    } catch (error) {
+      console.error("Error al obtener direcciones paginadas:", error);
+      throw error;
+    }
+  }
+
+
+
+
+
+
+};
 
 
 

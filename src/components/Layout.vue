@@ -37,6 +37,12 @@
           <font-awesome-icon icon="truck" class="menu-icon" />
           <span v-if="!isSidebarHidden">Proveedores</span>
         </li>
+        <li @click="navigate('Addresses')" :class="{ active: currentRoute === 'Addresses' }" :title="isSidebarHidden ? 'Direcciones' : ''">
+          <font-awesome-icon icon="truck" class="menu-icon" />
+          <span v-if="!isSidebarHidden">Direcciones</span>
+        </li>
+
+
       </ul>
       <!-- Logout Button -->
       <div class="logout-button" @click="logout" :title="isSidebarHidden ? 'Cerrar Sesión' : ''">

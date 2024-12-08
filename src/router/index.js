@@ -11,6 +11,7 @@ import Resources from "../views/admin/Resources.vue";
 import Stats from "../views/admin/Stats.vue";
 import Suppliers from "../views/admin/Suppliers.vue";
 import ViewAdmins from "../views/admin/View_Admins.vue";
+import Addresses from "../views/admin/Adress.vue";
 
 
 
@@ -75,10 +76,11 @@ export default new Router({
       name: "Resources",
       component: Resources,
     },
-
-
-
-
+    {
+      path: "/addresses",
+      name: "Addresses",
+      component: Addresses,
+    },
 
     {
       path: "*", // Ruta para redirigir cualquier URL desconocida

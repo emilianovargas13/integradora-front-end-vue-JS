@@ -81,6 +81,12 @@
           <b-form-group label="Contraseña" label-for="admin-password">
             <b-form-input type="password" id="admin-password" v-model="newAdmin.password" required></b-form-input>
           </b-form-group>
+
+          <b-form-group label="Presupuesto" label-for="admin-budget">
+            <b-form-input type="number" id="budget" v-model="newAdmin.budget" required></b-form-input>
+          </b-form-group>
+
+
         </b-form>
         <template #modal-footer>
           <b-button @click="saveAdmin" variant="primary">Crear Administrador</b-button>
@@ -128,6 +134,7 @@ export default {
         lada: "",
         phone: "",
         password: "",
+        budget: "",
       },
       fields: [
         { key: "name", label: "Nombre" },
@@ -135,6 +142,7 @@ export default {
         { key: "lada", label: "Lada" },
         { key: "phone", label: "Teléfono" },
         { key: "active", label: "Estado" },
+        { key: "budget", label: "Presupuesto" },
         { key: "actions", label: "Acciones", sortable: false },
       ],
     };
@@ -179,15 +187,17 @@ export default {
       }
     },
     async saveAdmin() {
-      try {
-        await apiService.createAdmin(this.newAdmin);
-        alert("Administrador creado correctamente.");
-        this.fetchAdmins(); // Refrescar la lista de administradores
-        this.closeModal();
-      } catch (error) {
-        console.error("Error al crear el administrador:", error);
-      }
-    },
+  try {
+    console.log("Datos enviados al backend:", JSON.stringify(this.newAdmin));
+    await apiService.createAdmin(this.newAdmin);
+    alert("Administrador creado correctamente.");
+    this.fetchAdmins();
+    this.closeModal();
+  } catch (error) {
+    console.error("Error al crear el administrador:", error);
+  }
+}
+,
     showCreateAdminDialog() {
       this.showModal = true;
       this.newAdmin = {
