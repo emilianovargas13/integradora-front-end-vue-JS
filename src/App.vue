@@ -9,8 +9,8 @@ export default {
   name: "App",
   mounted() {
     // Verifica si el usuario ya está en el login
-    if (this.$route.path !== "/login") {
-      this.$router.push("/login");
+    if (this.$route.path !== "/landig-page") {
+      this.$router.push("/landig-page");
     }
   },
 };

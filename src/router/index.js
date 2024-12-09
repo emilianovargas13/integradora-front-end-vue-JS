@@ -13,7 +13,7 @@ import Suppliers from "../views/admin/Suppliers.vue";
 import ViewAdmins from "../views/admin/View_Admins.vue";
 import Addresses from "../views/admin/Adress.vue";
 import SupplierResources from "@/views/admin/Supplier_resources.vue";
-
+import LandigPage from "../views/auth/Landing_page.vue";
 
 
 Vue.use(Router);
@@ -87,6 +87,11 @@ export default new Router({
       name: "SupplierResources",
       component: SupplierResources,
 
+    },
+    {
+      path: "/landig-page",
+      name: "LandingPage",
+      component: LandigPage
     },
 
 

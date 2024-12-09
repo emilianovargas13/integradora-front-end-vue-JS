@@ -44,6 +44,23 @@ const apiService = {
       });
   },
 
+
+/**
+   * Crea un nuevo tipo de recurso.
+   * @param {Object} resourceType - Datos del nuevo tipo de recurso.
+   */
+saveResourceType(resourceType) {
+  return apiClient.post(`/api/resourceTypes/`, resourceType)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error creando tipo de recurso:", error);
+      throw error;
+    });
+},
+
+
+
+
 // Obtiene una lista paginada de ResourceSuppliers por recurso
 
 
@@ -214,18 +231,7 @@ getAllResources() {
       });
   },
 
-  /**
-   * Crea un nuevo tipo de recurso.
-   * @param {Object} resourceType - Datos del nuevo tipo de recurso.
-   */
-  saveResourceType(resourceType) {
-    return apiClient.post(`/api/resourceTypes/`, resourceType)
-      .then((response) => response.data)
-      .catch((error) => {
-        console.error("Error creando tipo de recurso:", error);
-        throw error;
-      });
-  },
+  
 
   /**
    * Actualiza un tipo de recurso existente.

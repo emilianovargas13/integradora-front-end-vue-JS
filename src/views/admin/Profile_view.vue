@@ -1,166 +1,179 @@
 <template>
   <Layout>
-    <div class="landing-container">
-      <!-- Hero Section -->
-      <section class="hero">
-        <div class="hero-content">
-          <h1>Bienvenido a NeuroRehab Solutions</h1>
-          <p>Innovación y tecnología al servicio de tu neurorehabilitación.</p>
-          <b-button variant="primary" size="lg" class="cta-button">Explorar Servicios</b-button>
-        </div>
-      </section>
+    <template v-slot:default>
+      <div class="admin-dashboard">
+        <header class="dashboard-header">
+          <div class="container">
+            <h1>Panel de Administrador</h1>
+            <nav class="admin-nav">
+              <a href="#overview">Resumen</a>
+              <a href="#manage-users">Gestión de Usuarios</a>
+              <a href="#reports">Reportes</a>
+              <a href="#settings">Configuración</a>
+            </nav>
+          </div>
+        </header>
 
-      <!-- Features Section -->
-      <section class="features">
-        <h2 class="section-title">¿Por qué elegirnos?</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <font-awesome-icon icon="brain" class="feature-icon" />
-            <h3>Neurorehabilitación Avanzada</h3>
-            <p>Contamos con tecnología de punta para mejorar tu calidad de vida.</p>
+        <section id="overview" class="dashboard-overview">
+          <div class="container">
+            <h2>Resumen General</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <h3>Usuarios Activos</h3>
+                <p>125</p>
+              </div>
+              <div class="stat-card">
+                <h3>Eventos Actuales</h3>
+                <p>12</p>
+              </div>
+              <div class="stat-card">
+                <h3>Recursos Disponibles</h3>
+                <p>34</p>
+              </div>
+              <div class="stat-card">
+                <h3>Notificaciones Enviadas</h3>
+                <p>240</p>
+              </div>
+            </div>
           </div>
-          <div class="feature-card">
-            <font-awesome-icon icon="user-md" class="feature-icon" />
-            <h3>Especialistas Certificados</h3>
-            <p>Un equipo altamente capacitado y dedicado a tu recuperación.</p>
-          </div>
-          <div class="feature-card">
-            <font-awesome-icon icon="calendar-check" class="feature-icon" />
-            <h3>Gestión de Citas Fácil</h3>
-            <p>Programa y gestiona tus citas desde cualquier dispositivo.</p>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Testimonials Section -->
-      <section class="testimonials">
-        <h2 class="section-title">Testimonios</h2>
-        <div class="testimonials-grid">
-          <div class="testimonial-card">
-            <p>"Gracias a NeuroRehab Solutions, mi recuperación fue más rápida de lo que esperaba."</p>
-            <h4>- Juan Pérez</h4>
+        <section id="manage-users" class="dashboard-section">
+          <div class="container">
+            <h2>Gestión de Usuarios</h2>
+            <p>Aquí puedes administrar los usuarios registrados en el sistema.</p>
+            <button class="primary-btn">Ver Todos los Usuarios</button>
           </div>
-          <div class="testimonial-card">
-            <p>"El equipo es increíble, realmente se preocupan por tu bienestar."</p>
-            <h4>- Ana López</h4>
-          </div>
-          <div class="testimonial-card">
-            <p>"La tecnología y la atención personalizada marcaron la diferencia en mi vida."</p>
-            <h4>- Carlos Martínez</h4>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- Call-to-Action Section -->
-      <section class="cta">
-        <h2>¿Listo para transformar tu vida?</h2>
-        <p>Regístrate hoy mismo y empieza tu camino hacia una mejor salud.</p>
-        <b-button variant="success" size="lg" class="cta-button">Regístrate Ahora</b-button>
-      </section>
-    </div>
+        <section id="reports" class="dashboard-section">
+          <div class="container">
+            <h2>Reportes</h2>
+            <p>Accede a reportes detallados sobre la actividad del sistema.</p>
+            <button class="primary-btn">Ver Reportes</button>
+          </div>
+        </section>
+
+        <section id="settings" class="dashboard-section">
+          <div class="container">
+            <h2>Configuración</h2>
+            <p>Configura las opciones del sistema y tus preferencias personales.</p>
+            <button class="primary-btn">Ir a Configuración</button>
+          </div>
+        </section>
+
+        <footer class="dashboard-footer">
+          <div class="container">
+            <p>&copy; 2024 VEvents. Todos los derechos reservados.</p>
+          </div>
+        </footer>
+      </div>
+    </template>
   </Layout>
 </template>
 
 <script>
 import Layout from "@/components/Layout.vue";
-import { BButton } from "bootstrap-vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
-  name: "LandingPage",
+  name: "ProfileView",
   components: {
     Layout,
-    BButton,
-    FontAwesomeIcon,
   },
 };
 </script>
 
 <style scoped>
-.landing-container {
-  font-family: 'Arial', sans-serif;
+.admin-dashboard {
+  font-family: "Roboto", sans-serif;
+  color: #333;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  background-color: #003366;
+  color: #fff;
+  padding: 20px 0;
+}
+
+.dashboard-header h1 {
   text-align: center;
-  line-height: 1.6;
+  margin: 0;
 }
 
-.hero {
-  background-image: url("https://via.placeholder.com/1920x600");
-  background-size: cover;
-  background-position: center;
-  color: white;
-  padding: 3rem 2rem;
+.admin-nav {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
 }
 
-.hero-content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.admin-nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
-.hero-content p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+.dashboard-overview {
+  padding: 40px 0;
+  background-color: #fff;
 }
 
-.features {
-  padding: 3rem 2rem;
-  background-color: #f9f9f9;
-}
-
-.features-grid {
+.stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
-.feature-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+.stat-card {
+  background-color: #00509e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.stat-card p {
+  font-size: 2rem;
+  margin: 10px 0 0;
+}
+
+.dashboard-section {
+  padding: 40px 0;
+}
+
+.dashboard-section .container {
   text-align: center;
 }
 
-.feature-icon {
-  font-size: 2.5rem;
-  color: #007bff;
-  margin-bottom: 1rem;
+.primary-btn {
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
-.testimonials {
-  padding: 3rem 2rem;
+.primary-btn:hover {
+  background-color: #00509e;
+}
+
+.dashboard-footer {
+  text-align: center;
+  padding: 20px;
   background-color: #003366;
   color: white;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.testimonial-card {
-  background: white;
-  color: #003366;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  font-style: italic;
-}
-
-.cta {
-  padding: 3rem 2rem;
-  background-color: #28a745;
-  color: white;
-}
-
-.cta h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.cta-button {
-  margin-top: 1rem;
+  margin-top: 40px;
 }
 </style>

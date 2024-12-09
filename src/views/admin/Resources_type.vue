@@ -103,8 +103,24 @@
 
 <script>
 import Layout from "@/components/Layout.vue";
+import PouchDB from "pouchdb";
 import apiService from "@/service/api_service";
-import { BTable, BModal, BButton, BForm, BFormGroup, BFormInput, BFormTextarea, BRow, BCol, BBadge, BCard, BNav, BNavItem, BPagination } from "bootstrap-vue";
+import {
+  BTable,
+  BModal,
+  BButton,
+  BForm,
+  BFormGroup,
+  BFormInput,
+  BFormTextarea,
+  BRow,
+  BCol,
+  BBadge,
+  BCard,
+  BNav,
+  BNavItem,
+  BPagination,
+} from "bootstrap-vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
@@ -129,6 +145,7 @@ export default {
   },
   data() {
     return {
+      db: null,
       resourceTypes: [],
       loading: false,
       showModal: false,
@@ -151,33 +168,45 @@ export default {
         { key: "actions", label: "Acciones", sortable: false },
       ],
       availableIcons: [
-        ['fas', 'user'],
-        ['fas', 'archive'],
-        ['fas', 'calendar-alt'],
-        ['fas', 'chart-bar'],
-        ['fas', 'home'],
-        ['fas', 'truck'],
-        ['fas', 'bell'],
+        ["fas", "user"],
+        ["fas", "archive"],
+        ["fas", "calendar-alt"],
+        ["fas", "chart-bar"],
+        ["fas", "home"],
+        ["fas", "truck"],
+        ["fas", "bell"],
       ],
     };
   },
   methods: {
-    async fetchResourceTypes() {
-      this.loading = true;
+    async initPouchDB() {
+      this.db = new PouchDB("resourceTypes");
+
+      // Cargar datos existentes desde el backend al inicializar
       try {
-        const paginationParams = {
-          value: "", // Sin filtro por defecto
-        };
-        const response = await apiService.getPagedResourceTypes(paginationParams);
-        this.resourceTypes = response.data.content.map(resource => ({
-          ...resource,
-          active: resource.status,
-        }));
-        this.totalRows = response.data.totalElements; // Configurar total de registros para la paginación
+        const response = await apiService.get("/api/resourceTypes/list");
+        const existingResources = response.data;
+
+        for (const resource of existingResources) {
+          const resourceInDB = await this.db.get(resource.id).catch(() => null);
+          if (!resourceInDB) {
+            await this.db.put({ _id: resource.id, ...resource, synced: true });
+          }
+        }
+      } catch (error) {
+        console.error("Error al cargar datos iniciales del backend:", error);
+      }
+
+      // Iniciar sincronización de datos locales y remotos
+      this.syncWithBackend();
+    },
+    async fetchResourceTypes() {
+      try {
+        const result = await this.db.allDocs({ include_docs: true });
+        this.resourceTypes = result.rows.map((row) => row.doc);
+        this.totalRows = this.resourceTypes.length;
       } catch (error) {
         console.error("Error al obtener los tipos de recursos:", error);
-      } finally {
-        this.loading = false;
       }
     },
     showCreateResourceDialog() {
@@ -191,28 +220,27 @@ export default {
       };
       this.showModal = true;
     },
-    editResourceType(resourceType) {
-      this.isEditing = true;
-      this.newResourceType = { ...resourceType };
-      this.showModal = true;
-    },
     async saveResourceType() {
+      const resourceType = {
+        _id: this.isEditing ? this.newResourceType.id : new Date().toISOString(),
+        ...this.newResourceType,
+        synced: false, // Marcar como no sincronizado
+      };
       try {
-        if (this.isEditing) {
-          await apiService.updateResourceType(this.newResourceType);
-        } else {
-          await apiService.saveResourceType(this.newResourceType);
-        }
+        await this.db.put(resourceType);
         this.fetchResourceTypes();
         this.closeModal();
+        this.syncWithBackend();
       } catch (error) {
         console.error("Error al guardar tipo de recurso:", error);
       }
     },
     async toggleResourceTypeStatus(resourceType) {
       try {
-        await apiService.changeStatusResourceType({ id: resourceType.id });
         resourceType.active = !resourceType.active;
+        await this.db.put(resourceType);
+        this.fetchResourceTypes();
+        this.syncWithBackend(); // Intentar sincronizar
       } catch (error) {
         console.error("Error al cambiar el estado del tipo de recurso:", error);
       }
@@ -226,8 +254,27 @@ export default {
     navigateToResources() {
       this.$router.push({ name: "Resources" });
     },
+    async syncWithBackend() {
+      try {
+        const unsyncedDocs = await this.db.allDocs({ include_docs: true });
+        for (const row of unsyncedDocs.rows) {
+          const resourceType = row.doc;
+          if (!resourceType.synced) {
+            // Enviar al backend
+            await apiService.saveResourceType(resourceType);
+            // Marcar como sincronizado
+            resourceType.synced = true;
+            await this.db.put(resourceType);
+          }
+        }
+        console.log("Sincronización completada");
+      } catch (error) {
+        console.error("Error al sincronizar con el backend:", error);
+      }
+    },
   },
   mounted() {
+    this.initPouchDB();
     this.fetchResourceTypes();
   },
 };
