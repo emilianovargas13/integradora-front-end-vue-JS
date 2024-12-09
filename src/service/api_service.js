@@ -44,6 +44,103 @@ const apiService = {
       });
   },
 
+// Obtiene una lista paginada de ResourceSuppliers por recurso
+
+
+/**
+ * Obtiene todos los proveedores activos.
+ * @returns {Promise<Object>} Lista de proveedores activos.
+ */
+getAllActiveSuppliers() {
+  return apiClient.get('/api/suppliers/active')
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error obteniendo proveedores activos:", error);
+      throw error;
+    });
+},
+
+/**
+ * Obtiene una lista paginada de SupplierResources por recurso.
+ * @param {Object} paginationParams - Parámetros de paginación.
+ * @param {number} page - Página actual.
+ * @param {number} size - Tamaño de la página.
+ * @param {string} sort - Campo de ordenación.
+ * @param {string} direction - Dirección de la ordenación ('asc' o 'desc').
+ */
+getPagedResourceSuppliersByResource(paginationParams, page = 0, size = 10, sort = 'id', direction = 'desc') {
+  return apiClient.post(`/api/resource-suppliers/paged-by-resource?page=${page}&size=${size}&sort=${sort}&direction=${direction}`, paginationParams)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error obteniendo ResourceSuppliers por recurso:", error);
+      throw error;
+    });
+},
+
+/**
+ * Guarda un nuevo ResourceSupplier.
+ * @param {Object} resourceSupplierData - Datos del nuevo ResourceSupplier.
+ */
+saveResourceSupplier(resourceSupplierData) {
+  return apiClient.post('/api/resource-suppliers/', resourceSupplierData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error guardando ResourceSupplier:", error);
+      throw error;
+    });
+},
+
+/**
+ * Actualiza un ResourceSupplier existente.
+ * @param {Object} resourceSupplierData - Datos para actualizar el ResourceSupplier.
+ */
+updateResourceSupplier(resourceSupplierData) {
+  return apiClient.put('/api/resource-suppliers/', resourceSupplierData)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error actualizando ResourceSupplier:", error);
+      throw error;
+    });
+  },
+
+/**
+ * Obtiene una lista paginada de SupplierResources.
+ * @param {number} page - Página actual.
+ * @param {number} size - Tamaño de la página.
+ */
+getPagedSupplierResources(page = 0, size = 10) {
+  return apiClient.get(`/api/supplier-resources?page=${page}&size=${size}`)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error obteniendo SupplierResources:", error);
+      throw error;
+    });
+},
+
+/**
+ * Obtiene todos los proveedores.
+ */
+getAllSuppliers() {
+  return apiClient.get('/api/suppliers')
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error obteniendo proveedores:", error);
+      throw error;
+    });
+},
+
+/**
+ * Obtiene todos los recursos.
+ */
+getAllResources() {
+  return apiClient.get('/api/resources')
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error obteniendo recursos:", error);
+      throw error;
+    });
+},
+
 
 
 
@@ -271,7 +368,7 @@ const apiService = {
         throw error;
       });
   },
-  
+
 
 
   /**
@@ -339,7 +436,7 @@ const apiService = {
         throw error;
       });
   }
-  
+
   ,
 
   /**
@@ -359,15 +456,15 @@ const apiService = {
  * Actualiza un proveedor existente.
  * @param {Object} supplierData - Datos para actualizar el proveedor.
  */
-updateSupplier(supplierData) {
-  return apiClient.put('/api/suppliers/', supplierData)
-    .then((response) => response.data)
-    .catch((error) => {
-      console.error("Error actualizando proveedor:", error.response?.data || error.message);
-      throw error;
-    });
-}
-,
+  updateSupplier(supplierData) {
+    return apiClient.put('/api/suppliers/', supplierData)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error("Error actualizando proveedor:", error.response?.data || error.message);
+        throw error;
+      });
+  }
+  ,
 
   /**
    * Obtiene los detalles de un proveedor.
@@ -437,7 +534,8 @@ updateSupplier(supplierData) {
       console.error("Error al obtener direcciones paginadas:", error);
       throw error;
     }
-  }
+  },
+
 
 
 

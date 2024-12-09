@@ -41,7 +41,11 @@
           <font-awesome-icon icon="truck" class="menu-icon" />
           <span v-if="!isSidebarHidden">Direcciones</span>
         </li>
-
+        
+        <li @click="navigate('SupplierResources')" :class="{ active: currentRoute === 'SupplierResources' }" :title="isSidebarHidden ? 'SupplierResources' : ''">
+          <font-awesome-icon icon="calendar" class="menu-icon" />
+          <span v-if="!isSidebarHidden">SupplierResources</span>
+        </li>
 
       </ul>
       <!-- Logout Button -->
@@ -56,6 +60,9 @@
       <slot></slot>
     </div>
   </div>
+
+
+
 </template>
 
 <script>

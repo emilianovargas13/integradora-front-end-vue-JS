@@ -12,7 +12,7 @@ import Stats from "../views/admin/Stats.vue";
 import Suppliers from "../views/admin/Suppliers.vue";
 import ViewAdmins from "../views/admin/View_Admins.vue";
 import Addresses from "../views/admin/Adress.vue";
-
+import SupplierResources from "@/views/admin/Supplier_resources.vue";
 
 
 
@@ -81,6 +81,16 @@ export default new Router({
       name: "Addresses",
       component: Addresses,
     },
+    {
+
+      path: "/supplier-resources",
+      name: "SupplierResources",
+      component: SupplierResources,
+
+    },
+
+
+
 
     {
       path: "*", // Ruta para redirigir cualquier URL desconocida
