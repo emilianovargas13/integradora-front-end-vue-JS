@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://174.129.194.175:8082"; // Cambia esto si el backend está en otro lugar
+const API_BASE_URL = "http://174.129.194.175:8081"; // Cambia esto si el backend está en otro lugar
 
 // Crear una instancia de Axios
 const apiClient = axios.create({
