@@ -3,7 +3,7 @@
     <div class="resources-container">
       <div class="header-container">
         <div class="header-left">
-          <h1 class="text-center mb-4">Gestión de Recursos VGS</h1>
+          <h1 class="text-center mb-4">Gestión de Recursos VGS123</h1>
           <p class="text-center">Administra los recursos individuales que tienes disponibles en el sistema.</p>
         </div>
       </div>
