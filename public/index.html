@@ -12,6 +12,43 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
+    <!-- Archivos de la app se inyectarán automáticamente aquí -->
+
+    <script>
+      // Registro manual del Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('service-worker.js')
+            .then(registration => {
+              console.log('Service worker has been registered:', registration);
+
+              // Aquí puedes simular la lógica de register-service-worker:
+              // Por ejemplo, escuchar eventos del Service Worker actualizado:
+              registration.onupdatefound = () => {
+                console.log('New content is downloading.');
+                const installingWorker = registration.installing;
+                installingWorker.onstatechange = () => {
+                  if (installingWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                      console.log('New content is available; please refresh.');
+                    } else {
+                      console.log('Content has been cached for offline use.');
+                    }
+                  }
+                };
+              };
+
+            })
+            .catch(error => {
+              console.error('Error during service worker registration:', error);
+            });
+
+          // Manejo de estado offline
+          window.addEventListener('offline', () => {
+            console.log('No internet connection found. App is running in offline mode.');
+          });
+        });
+      }
+    </script>
   </body>
 </html>
