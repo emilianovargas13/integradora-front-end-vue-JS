@@ -1,10 +1,12 @@
 const CACHE_NAME = 'cache-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  // Agrega aquí las rutas o archivos que deseas cachear
-];
+  './', // Para la raíz relativa al subdirectorio
+  './index.html',
+  './favicon.ico', // Asegúrate de incluir recursos esenciales
+  './css/styles.css', // Ejemplo de otros recursos estáticos
+  './js/app.js',
 
+]
 // Instalación
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -39,7 +41,6 @@ self.addEventListener('fetch', (event) => {
       }
 
       return fetch(event.request).then((response) => {
-        // Verifica que la respuesta sea válida
         if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
@@ -51,6 +52,9 @@ self.addEventListener('fetch', (event) => {
 
         return response;
       });
+    }).catch(() => {
+      // Aquí puedes devolver una página de fallback si el recurso no está disponible
+      return caches.match('./index.html');
     })
   );
 });
