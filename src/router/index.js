@@ -99,7 +99,7 @@ export default new Router({
 
     {
       path: "*", // Ruta para redirigir cualquier URL desconocida
-      redirect: "/login",
+      redirect: "/landig-page",
     },
   ],
 });
