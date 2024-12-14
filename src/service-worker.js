@@ -1,17 +1,21 @@
 const CACHE_NAME = 'cache-v1';
 const urlsToCache = [
-  './', // Para la raíz relativa al subdirectorio
-  './index.html',
-  './favicon.ico', // Asegúrate de incluir recursos esenciales
-  './css/styles.css', // Ejemplo de otros recursos estáticos
-  './js/app.js',
+  '/',
+  '/index.html',
+  '/favicon.ico',
+  '/css/styles.css',
+  '/js/app.js',
+  '/offline.html', // Página de fallback
+];
 
-]
 // Instalación
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+      .then((cache) => {
+        console.log('Abriendo caché');
+        return cache.addAll(urlsToCache);
+      })
   );
 });
 
@@ -24,6 +28,7 @@ self.addEventListener('activate', (event) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (!cacheWhitelist.includes(cacheName)) {
+            console.log('Eliminando caché antiguo:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -53,8 +58,7 @@ self.addEventListener('fetch', (event) => {
         return response;
       });
     }).catch(() => {
-      // Aquí puedes devolver una página de fallback si el recurso no está disponible
-      return caches.match('./index.html');
+      return caches.match('/offline.html'); // Página de fallback en caso de error
     })
   );
 });
