@@ -5,7 +5,6 @@ const urlsToCache = [
   '/favicon.ico',
   '/css/styles.css',
   '/js/app.js',
-  '/offline.html', // Página de fallback
 ];
 
 // Instalación
