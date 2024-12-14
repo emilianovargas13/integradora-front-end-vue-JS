@@ -11,7 +11,7 @@
             <a href="#features">Características</a>
             <a href="#testimonials">Testimonios</a>
             <a href="#contact">Contacto</a>
-            <a @click.prevent="$router.push('/login-view')" class="btn btn-primary">Iniciar Sesión</a>
+            <a @click.prevent="$router.push('/login')" class="btn btn-primary">Iniciar Sesión</a>
           </nav>
         </div>
       </header>

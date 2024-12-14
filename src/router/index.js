@@ -13,8 +13,7 @@ import Suppliers from "../views/admin/Suppliers.vue";
 import ViewAdmins from "../views/admin/View_Admins.vue";
 import Addresses from "../views/admin/Adress.vue";
 import SupplierResources from "@/views/admin/Supplier_resources.vue";
-import LandigPage from "../views/auth/Landing_page.vue";
-
+import LandingPage from "../views/auth/Landing_page.vue";
 
 Vue.use(Router);
 
@@ -82,24 +81,18 @@ export default new Router({
       component: Addresses,
     },
     {
-
       path: "/supplier-resources",
       name: "SupplierResources",
       component: SupplierResources,
-
     },
     {
-      path: "/landig-page",
+      path: "/landing-page",
       name: "LandingPage",
-      component: LandigPage
+      component: LandingPage,
     },
-
-
-
-
     {
-      path: "*", // Ruta para redirigir cualquier URL desconocida
-      redirect: "/login",
+      path: '*',
+      redirect: '/landing-page',
     },
   ],
 });
